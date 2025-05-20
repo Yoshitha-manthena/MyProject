@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Leave Management Login</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/react@18/umd/react.development.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/babel-standalone@7.22.9/babel.min.js"></script>
+  <style>
+    body {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+    }
+  </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+  <div id="root"></div>
+  <script type="text/babel">
+    function App() {
+      const [formType, setFormType] = React.useState('login');
+      const [email, setEmail] = React.useState('');
+      const [password, setPassword] = React.useState('');
+      const [confirmPassword, setConfirmPassword] = React.useState('');
+      const [error, setError] = React.useState('');
+
+      const validateEmail = (email) => {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+      };
+
+      const handleSubmit = (e) => {
+        e.preventDefault();
+        setError('');
+
+        if (!validateEmail(email)) {
+          setError('Please enter a valid company email.');
+          return;
+        }
+
+        if (formType === 'login') {
+          if (!password) {
+            setError('Password is required.');
+            return;
+          }
+          // Placeholder for Salesforce OAuth login
+          console.log('Logging in with:', { email, password });
+          // Send to backend: POST /api/login with { email, password }
+          // Backend should initiate Salesforce OAuth flow
+          // Example: redirect to Salesforce OAuth endpoint
+          // window.location.href = 'https://login.salesforce.com/services/oauth2/authorize?response_type=code&client_id=YOUR_CLIENT_ID&redirect_uri=YOUR_REDIRECT_URI&state=login';
+        } else if (formType === 'create') {
+          if (password !== confirmPassword) {
+            setError('Passwords do not match.');
+            return;
+          }
+          if (password.length < 8) {
+            setError('Password must be at least 8 characters.');
+            return;
+          }
+          // Placeholder for Salesforce user creation
+          console.log('Creating account with:', { email, password });
+          // Send to backend: POST /api/create-account with { email, password }
+          // Backend should call Salesforce REST API to create user
+        } else if (formType === 'reset') {
+          if (password !== confirmPassword) {
+            setError('Passwords do not match.');
+            return;
+          }
+          if (password.length < 8) {
+            setError('Password must be at least 8 characters.');
+            return;
+          }
+          // Placeholder for Salesforce password reset
+          console.log('Resetting password for:', { email, password });
+          // Send to backend: POST /api/reset-password with { email, password }
+          // Backend should call Salesforce REST API to reset password
+        }
+      };
+
+      const renderForm = () => {
+        return (
+          <div className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-md">
+            <h1 className="text-3xl font-bold text-center mb-6">
+              {formType === 'login' ? 'Sign In' : formType === 'create' ? 'Create Account' : 'Reset Password'}
+            </h1>
+            {error && <p className="text-red-500 text-center mb-4">{error}</p>}
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label className="block text-gray-700 font-medium mb-1">Company Email</label>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="you@company.com"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-gray-700 font-medium mb-1">Password</label>
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="Enter your password"
+                  required
+                />
+              </div>
+              {(formType === 'create' || formType === 'reset') && (
+                <div>
+                  <label className="block text-gray-700 font-medium mb-1">Confirm Password</label>
+                  <input
+                    type="password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="Confirm your password"
+                    required
+                  />
+                </div>
+              )}
+              <button
+                type="submit"
+                className="w-full bg-black text-white p-3 rounded-lg font-medium hover:bg-gray-800 transition duration-300"
+              >
+                {formType === 'login' ? 'Sign In' : formType === 'create' ? 'Create Account' : 'Reset Password'}
+              </button>
+            </form>
+            <div className="mt-4 text-center space-y-2">
+              {formType !== 'login' && (
+                <p>
+                  <button
+                    onClick={() => setFormType('login')}
+                    className="text-blue-600 hover:underline"
+                  >
+                    Back to Sign In
+                  </button>
+                </p>
+              )}
+              {formType !== 'create' && (
+                <p>
+                  <button
+                    onClick={() => setFormType('create')}
+                    className="text-blue-600 hover:underline"
+                  >
+                    Create an Account
+                  </button>
+                </p>
+              )}
+              {formType !== 'reset' && (
+                <p>
+                  <button
+                    onClick={() => setFormType('reset')}
+                    className="text-blue-600 hover:underline"
+                  >
+                    Forgot Password?
+                  </button>
+                </p>
+              )}
+            </div>
+          </div>
+        );
+      };
+
+      return (
+        <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+          {renderForm()}
+        </div>
+      );
+    }
+
+    ReactDOM.render(<App />, document.getElementById('root'));
+  </script>
+</body>
+</html>
