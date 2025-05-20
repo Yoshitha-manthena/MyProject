@@ -5,172 +5,331 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Leave Management Login</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/react@18/umd/react.development.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/react-dom@18/umd/react-dom.development.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/babel-standalone@7.22.9/babel.min.js"></script>
   <style>
     body {
-      font-family: 'Helvetica Neue', Arial, sans-serif;
+        font-family: 'Helvetica neue', Arial, sans-serif;
     }
+    .form-container {
+        display: none;
+    }
+    .form-container.active{
+        display:block;
+    }
+   <!-- body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: #f5f5f7;
+    }
+    .btn-primary {
+      background-color: #0071e3;
+      transition: background-color 0.3s ease;
+    }
+    .btn-primary:hover {
+      background-color: #005bb5;
+    }
+    .btn-secondary {
+      background-color: #6b7280;
+      transition: background-color 0.3s ease;
+    }
+    .btn-secondary:hover {
+      background-color: #4b5563;
+    }
+    .tab-active {
+      border-bottom: 2px solid #0071e3;
+      color: #0071e3;
+    }-->
   </style>
 </head>
 <body class="bg-gray-100 flex items-center justify-center min-h-screen">
-  <div id="root"></div>
-  <script type="text/babel">
-    function App() {
-      const [formType, setFormType] = React.useState('login');
-      const [email, setEmail] = React.useState('');
-      const [password, setPassword] = React.useState('');
-      const [confirmPassword, setConfirmPassword] = React.useState('');
-      const [error, setError] = React.useState('');
-
-      const validateEmail = (email) => {
-        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-      };
-
-      const handleSubmit = (e) => {
-        e.preventDefault();
-        setError('');
-
-        if (!validateEmail(email)) {
-          setError('Please enter a valid company email.');
-          return;
-        }
-
-        if (formType === 'login') {
-          if (!password) {
-            setError('Password is required.');
-            return;
-          }
-          // Placeholder for Salesforce OAuth login
-          console.log('Logging in with:', { email, password });
-          // Send to backend: POST /api/login with { email, password }
-          // Backend should initiate Salesforce OAuth flow
-          // Example: redirect to Salesforce OAuth endpoint
-          // window.location.href = 'https://login.salesforce.com/services/oauth2/authorize?response_type=code&client_id=YOUR_CLIENT_ID&redirect_uri=YOUR_REDIRECT_URI&state=login';
-        } else if (formType === 'create') {
-          if (password !== confirmPassword) {
-            setError('Passwords do not match.');
-            return;
-          }
-          if (password.length < 8) {
-            setError('Password must be at least 8 characters.');
-            return;
-          }
-          // Placeholder for Salesforce user creation
-          console.log('Creating account with:', { email, password });
-          // Send to backend: POST /api/create-account with { email, password }
-          // Backend should call Salesforce REST API to create user
-        } else if (formType === 'reset') {
-          if (password !== confirmPassword) {
-            setError('Passwords do not match.');
-            return;
-          }
-          if (password.length < 8) {
-            setError('Password must be at least 8 characters.');
-            return;
-          }
-          // Placeholder for Salesforce password reset
-          console.log('Resetting password for:', { email, password });
-          // Send to backend: POST /api/reset-password with { email, password }
-          // Backend should call Salesforce REST API to reset password
-        }
-      };
-
-      const renderForm = () => {
-        return (
-          <div className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-md">
-            <h1 className="text-3xl font-bold text-center mb-6">
-              {formType === 'login' ? 'Sign In' : formType === 'create' ? 'Create Account' : 'Reset Password'}
-            </h1>
-            {error && <p className="text-red-500 text-center mb-4">{error}</p>}
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <label className="block text-gray-700 font-medium mb-1">Company Email</label>
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="you@company.com"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-gray-700 font-medium mb-1">Password</label>
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Enter your password"
-                  required
-                />
-              </div>
-              {(formType === 'create' || formType === 'reset') && (
-                <div>
-                  <label className="block text-gray-700 font-medium mb-1">Confirm Password</label>
-                  <input
-                    type="password"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="Confirm your password"
-                    required
-                  />
-                </div>
-              )}
-              <button
-                type="submit"
-                className="w-full bg-black text-white p-3 rounded-lg font-medium hover:bg-gray-800 transition duration-300"
-              >
-                {formType === 'login' ? 'Sign In' : formType === 'create' ? 'Create Account' : 'Reset Password'}
-              </button>
-            </form>
-            <div className="mt-4 text-center space-y-2">
-              {formType !== 'login' && (
-                <p>
-                  <button
-                    onClick={() => setFormType('login')}
-                    className="text-blue-600 hover:underline"
-                  >
-                    Back to Sign In
-                  </button>
-                </p>
-              )}
-              {formType !== 'create' && (
-                <p>
-                  <button
-                    onClick={() => setFormType('create')}
-                    className="text-blue-600 hover:underline"
-                  >
-                    Create an Account
-                  </button>
-                </p>
-              )}
-              {formType !== 'reset' && (
-                <p>
-                  <button
-                    onClick={() => setFormType('reset')}
-                    className="text-blue-600 hover:underline"
-                  >
-                    Forgot Password?
-                  </button>
-                </p>
-              )}
-            </div>
-          </div>
-        );
-      };
-
-      return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-          {renderForm()}
+  <div class="bg-white p-8 rounded-2xl shadow-lg w-full max-w-md">
+    <!-- Login Form -->
+    <div id="login-form" class="form-container active">
+       <!--<img src="https://bluepal.com/assets/bpl_logo_1.png?v=1.1" alt = "BluePal logo">--> 
+      <h1 class="text-3xl font-bold text-center mb-6">Sign In</h1>
+      <p id="login-error" class="text-red-500 text-center mb-4 hidden"></p>
+      <form id="login-form-element" class="space-y-4">
+        <div>
+          <label class="block text-gray-700 font-medium mb-1">Company Email</label>
+          <input
+            type="email"
+            id="login-email"
+            class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="you@company.com"
+            required
+          />
         </div>
-      );
+        <div>
+          <label class="block text-gray-700 font-medium mb-1">Password</label>
+          <input
+            type="password"
+            id="login-password"
+            class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Enter your password"
+            required
+          />
+        </div>
+        <button
+          type="submit"
+          class="w-full bg-black text-white p-3 rounded-lg font-medium hover:bg-gray-800 transition duration-300"
+        >
+          Sign In
+        </button>
+      </form>
+      <div class="mt-4 text-center space-y-2">
+        <p>
+          <button onclick="showForm('create')" class="text-blue-600 hover:underline">
+            Create an Account
+          </button>
+        </p>
+        <p>
+          <button onclick="showForm('reset')" class="text-blue-600 hover:underline">
+            Forgot Password?
+          </button>
+        </p>
+      </div>
+    </div>
+
+    <!-- Create Account Form -->
+    <div id="create-form" class="form-container">
+      <h1 class="text-3xl font-bold text-center mb-6">Create Account</h1>
+      <p id="create-error" class="text-red-500 text-center mb-4 hidden"></p>
+      <form id="create-form-element" class="space-y-4">
+        <div>
+          <label class="block text-gray-700 font-medium mb-1">Company Email</label>
+          <input
+            type="email"
+            id="create-email"
+            class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="you@company.com"
+            required
+          />
+        </div>
+        <div>
+          <label class="block text-gray-700 font-medium mb-1">New Password</label>
+          <input
+            type="password"
+            id="create-password"
+            class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Enter your password"
+            required
+          />
+        </div>
+        <div>
+          <label class="block text-gray-700 font-medium mb-1">Confirm Password</label>
+          <input
+            type="password"
+            id="create-confirm-password"
+            class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Confirm your password"
+            required
+          />
+        </div>
+        <button
+          type="submit"
+          class="w-full bg-black text-white p-3 rounded-lg font-medium hover:bg-gray-800 transition duration-300"
+        >
+          Create Account
+        </button>
+      </form>
+      <div class="mt-4 text-center">
+        <p>
+          <button onclick="showForm('login')" class="text-blue-600 hover:underline">
+            Back to Sign In
+          </button>
+        </p>
+      </div>
+    </div>
+
+    <!-- Reset Password Form -->
+    <div id="reset-form" class="form-container">
+      <h1 class="text-3xl font-bold text-center mb-6">Reset Password</h1>
+      <p id="reset-error" class="text-red-500 text-center mb-4 hidden"></p>
+      <form id="reset-form-element" class="space-y-4">
+        <div>
+          <label class="block text-gray-700 font-medium mb-1">Company Email</label>
+          <input
+            type="email"
+            id="reset-email"
+            class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="you@company.com"
+            required
+          />
+        </div>
+        <div>
+          <label class="block text-gray-700 font-medium mb-1">New Password</label>
+          <input
+            type="password"
+            id="reset-password"
+            class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Enter your password"
+            required
+          />
+        </div>
+        <div>
+          <label class="block text-gray-700 font-medium mb-1">Confirm Password</label>
+          <input
+            type="password"
+            id="reset-confirm-password"
+            class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Confirm your password"
+            required
+          />
+        </div>
+        <button
+          type="submit"
+          class="w-full bg-black text-white p-3 rounded-lg font-medium hover:bg-gray-800 transition duration-300"
+        >
+          Reset Password
+        </button>
+      </form>
+      <div class="mt-4 text-center">
+        <p>
+          <button onclick="showForm('login')" class="text-blue-600 hover:underline">
+            Back to Sign In
+          </button>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function showForm(formId) {
+      document.querySelectorAll('.form-container').forEach(form => {
+        form.classList.remove('active');
+      });
+      document.getElementById(`${formId}-form`).classList.add('active');
+      // Clear previous errors
+      document.querySelectorAll('.text-red-500').forEach(error => {
+        error.classList.add('hidden');
+        error.textContent = '';
+      });
     }
 
-    ReactDOM.render(<App />, document.getElementById('root'));
+    function validateEmail(email) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+
+    function showError(formId, message) {
+      const errorElement = document.getElementById(`${formId}-error`);
+      errorElement.textContent = message;
+      errorElement.classList.remove('hidden');
+    }
+
+    // Login Form Submission
+    document.getElementById('login-form-element').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const email = document.getElementById('login-email').value;
+      const password = document.getElementById('login-password').value;
+
+      if (!validateEmail(email)) {
+        showError('login', 'Please enter a valid company email.');
+        return;
+      }
+      if (!password) {
+        showError('login', 'Password is required.');
+        return;
+      }
+
+      // Placeholder for Salesforce OAuth login
+      console.log('Logging in with:', { email, password });
+      // Send to backend: POST /api/login with { email, password }
+      // Example OAuth redirect (requires backend to handle token exchange)
+      // window.location.href = 'https://login.salesforce.com/services/oauth2/authorize?response_type=code&client_id=YOUR_CLIENT_ID&redirect_uri=YOUR_REDIRECT_URI&state=login';
+      fetch('/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.error) {
+          showError('login', data.error);
+        } else {
+          console.log('Login successful:', data);
+          // Redirect or update UI after successful login
+        }
+      })
+      .catch(error => showError('login', 'An error occurred. Please try again.'));
+    });
+
+    // Create Account Form Submission
+    document.getElementById('create-form-element').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const email = document.getElementById('create-email').value;
+      const password = document.getElementById('create-password').value;
+      const confirmPassword = document.getElementById('create-confirm-password').value;
+
+      if (!validateEmail(email)) {
+        showError('create', 'Please enter a valid company email.');
+        return;
+      }
+      if (password.length < 8) {
+        showError('create', 'Password must be at least 8 characters.');
+        return;
+      }
+      if (password !== confirmPassword) {
+        showError('create', 'Passwords do not match.');
+        return;
+      }
+
+      // Placeholder for Salesforce user creation
+      console.log('Creating account with:', { email, password });
+      // Send to backend: POST /api/create-account with { email, password }
+      fetch('/api/create-account', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.error) {
+          showError('create', data.error);
+        } else {
+          console.log('Account created:', data);
+          showForm('login');
+        }
+      })
+      .catch(error => showError('create', 'An error occurred. Please try again.'));
+    });
+
+    // Reset Password Form Submission
+    document.getElementById('reset-form-element').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const email = document.getElementById('reset-email').value;
+      const password = document.getElementById('reset-password').value;
+      const confirmPassword = document.getElementById('reset-confirm-password').value;
+
+      if (!validateEmail(email)) {
+        showError('reset', 'Please enter a valid company email.');
+        return;
+      }
+      if (password.length < 8) {
+        showError('reset', 'Password must be at least 8 characters.');
+        return;
+      }
+      if (password !== confirmPassword) {
+        showError('reset', 'Passwords do not match.');
+        return;
+      }
+
+      // Placeholder for Salesforce password reset
+      console.log('Resetting password for:', { email, password });
+      // Send to backend: POST /api/reset-password with { email, password }
+      fetch('/api/reset-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.error) {
+          showError('reset', data.error);
+        } else {
+          console.log('Password reset successful:', data);
+          showForm('login');
+        }
+      })
+      .catch(error => showError('reset', 'An error occurred. Please try again.'));
+    });
   </script>
 </body>
 </html>
