@@ -9,7 +9,7 @@ function App() {
 
   // Salesforce OAuth settings
   const CLIENT_ID = '3MVG91oqviqJKoEHmA8IKsVaNBgMWqhBy6TVMvGBWq7tB3Bii6IUDsIN5La74pYYltPLUF0dK9r33w7yfAhzF'; // Replace with your Connected App's Client ID
-  const REDIRECT_URI = 'http://localhost:3000/callback'; // Replace with your callback URL
+  const REDIRECT_URI = 'http://localhost:1717/OauthRedirect'; // Replace with your callback URL
   const LOGIN_URL = 'https://test.salesforce.com/services/oauth2/authorize'; // Use test.salesforce.com for sandbox
 
   const handleLogin = async (e) => {
