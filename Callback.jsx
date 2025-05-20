@@ -18,9 +18,9 @@ function Callback() {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
         body: new URLSearchParams({
-          grant_type: 'pHKSpHLawHRMBT3vFFtvA58J4',
-          client_id: '3MVG91oqviqJKoEHmA8IKsVaNBgMWqhBy6TVMvGBWq7tB3Bii6IUDsIN5La74pYYltPLUF0dK9r33w7yfAhzF',
-          client_secret: '182AC02651AFC3A411D46500F5A44C01722661F8D89C368F29420EE7F73E81E2',
+          grant_type: '',
+          client_id: '',
+          client_secret: '',
           code: code,
           redirect_uri: 'http://localhost:1717/OauthRedirect',
         }),
